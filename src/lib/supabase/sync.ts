@@ -4,23 +4,15 @@ import { createClient } from './client';
 
 type SyncType = 'cycles' | 'entries' | 'habits' | 'medications' | 'settings';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const sb = () => createClient() as any;
+
 export async function syncToServer(type: SyncType, data: unknown) {
   const supabase = createClient();
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return;
 
-  const tableMap: Record<string, string> = {
-    cycles: 'user_cycles',
-    entries: 'user_entries',
-    habits: 'user_habits',
-    medications: 'user_medications',
-    settings: 'user_settings',
-  };
-
-  const table = tableMap[type];
-  if (!table) return;
-
-  await supabase.from(table).upsert({
+  await sb().from(`user_${type}`).upsert({
     user_id: session.user.id,
     data,
     updated_at: new Date().toISOString(),
@@ -32,26 +24,17 @@ export async function syncFromServer(type: SyncType | 'all'): Promise<Record<str
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return null;
 
-  const tableMap: Record<string, string> = {
-    cycles: 'user_cycles',
-    entries: 'user_entries',
-    habits: 'user_habits',
-    medications: 'user_medications',
-    settings: 'user_settings',
-  };
-
   const result: Record<string, unknown> = {};
 
   if (type === 'all') {
-    for (const [key, table] of Object.entries(tableMap)) {
-      const { data } = await supabase.from(table).select('data').eq('user_id', session.user.id).single();
-      result[key] = data?.data || null;
+    const tables: SyncType[] = ['cycles', 'entries', 'habits', 'medications', 'settings'];
+    for (const t of tables) {
+      const { data } = await sb().from(`user_${t}`).select('data').eq('user_id', session.user.id).single();
+      result[t] = data?.data ?? null;
     }
   } else {
-    const table = tableMap[type];
-    if (!table) return null;
-    const { data } = await supabase.from(table).select('data').eq('user_id', session.user.id).single();
-    result[type] = data?.data || null;
+    const { data } = await sb().from(`user_${type}`).select('data').eq('user_id', session.user.id).single();
+    result[type] = data?.data ?? null;
   }
 
   return result;
