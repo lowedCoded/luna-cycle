@@ -4,12 +4,16 @@ import { motion } from 'framer-motion';
 import {
   HelpCircle, Moon, Sun, Sparkles, CloudMoon,
   Heart, Thermometer, Droplets, Brain, CalendarDays,
-  Palette, Info, ChevronDown, Activity,
+  Palette, Info, ChevronDown, Activity, Shield,
+  Home, BookText, LayoutGrid, Timeline as TimelineIcon,
+  Settings, Palette as PaletteIcon, BookOpen, Wind,
+  Flame, Lightbulb, Apple, Dumbbell, Moon as MoonIcon,
+  Droplets as DropletIcon, Thermometer as ThermometerIcon,
+  Scale, Stethoscope, Pill, Smile, Plus,
 } from 'lucide-react';
 import { Card } from '@/ui/Card';
 import { useT } from '@/components/providers/AppProvider';
 import { useSettingsStore } from '@/lib/store/settingsStore';
-import { useCycleStore } from '@/lib/store/cycleStore';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -101,9 +105,9 @@ const phaseDetails: Record<string, { body: Record<string, string>; selfCare: Rec
 
 const symptomDetails: Record<string, Record<string, string>> = {
   headache: {
-    en: 'Hormonal fluctuations, especially estrogen drop before your period, can trigger headaches. Stay hydrated, rest in a dark room, and try magnesium. Track your headaches to identify cycle-related patterns.',
-    ru: 'Гормональные колебания, особенно падение эстрогена перед менструацией, могут вызывать головные боли. Пейте воду, отдыхайте в тёмной комнате, попробуйте магний. Отслеживайте головные боли для выявления цикличных паттернов.',
-    uk: 'Гормональні коливання, особливо падіння естрогену перед менструацією, можуть викликати головний біль. Пийте воду, відпочивайте в темній кімнаті, спробуйте магній.',
+    en: 'Hormonal fluctuations, especially estrogen drop before your period, can trigger headaches. Stay hydrated, rest in a dark room, and try magnesium.',
+    ru: 'Гормональные колебания, особенно падение эстрогена перед менструацией, могут вызывать головные боли. Пейте воду, отдыхайте в тёмной комнате, попробуйте магний.',
+    uk: 'Гормональні коливання, особливо падіння естрогену перед менструацією, можуть викликати головний біль.',
     de: 'Hormonschwankungen, besonders der Östrogenabfall vor der Periode, können Kopfschmerzen auslösen.',
     fr: 'Les fluctuations hormonales, en particulier la baisse d\'œstrogène avant les règles, peuvent déclencher des maux de tête.',
     es: 'Las fluctuaciones hormonales, especialmente la caída de estrógeno antes del período, pueden desencadenar dolores de cabeza.',
@@ -113,8 +117,8 @@ const symptomDetails: Record<string, Record<string, string>> = {
     ar: 'يمكن للتقلبات الهرمونية، خاصة انخفاض الإستروجين قبل الدورة الشهرية، أن تسبب الصداع.',
   },
   bloating: {
-    en: 'Water retention is caused by progesterone rise in the luteal phase. Reduce salt, eat potassium-rich foods (bananas, spinach), drink herbal teas like peppermint, and avoid carbonated drinks.',
-    ru: 'Задержка воды вызвана повышением прогестерона в лютеиновой фазе. Уменьшите соль, ешьте продукты с калием (бананы, шпинат), пейте мятный чай, избегайте газировки.',
+    en: 'Water retention is caused by progesterone rise in the luteal phase. Reduce salt, eat potassium-rich foods, drink herbal teas like peppermint.',
+    ru: 'Задержка воды вызвана повышением прогестерона в лютеиновой фазе. Уменьшите соль, ешьте продукты с калием, пейте мятный чай.',
     uk: 'Затримка води викликана підвищенням прогестерону в лютеїновій фазі. Зменшіть сіль, їжте продукти з калієм.',
     de: 'Wassereinlagerungen werden durch den Progesteronanstieg in der Lutealphase verursacht.',
     fr: 'La rétention d\'eau est causée par l\'augmentation de la progestérone en phase lutéale.',
@@ -125,130 +129,183 @@ const symptomDetails: Record<string, Record<string, string>> = {
     ar: 'احتباس الماء ناتج عن ارتفاع البروجسترون في المرحلة الأصفرية.',
   },
   cramps: {
-    en: 'Prostaglandins cause uterine contractions. Apply heat, take ibuprofen, try gentle yoga. Omega-3 fatty acids and magnesium can reduce cramp intensity over time.',
-    ru: 'Простагландины вызывают сокращения матки. Прикладывайте тепло, принимайте ибупрофен, делайте лёгкую йогу. Омега-3 и магний со временем уменьшают силу спазмов.',
+    en: 'Prostaglandins cause uterine contractions. Apply heat, take ibuprofen, try gentle yoga. Omega-3 fatty acids and magnesium can reduce cramp intensity.',
+    ru: 'Простагландины вызывают сокращения матки. Прикладывайте тепло, принимайте ибупрофен, делайте лёгкую йогу. Омега-3 и магний снижают спазмы.',
     uk: 'Простагландини викликають скорочення матки. Прикладайте тепло, приймайте ібупрофен, робіть легку йогу.',
-    de: 'Prostaglandine verursachen Gebärmutterkontraktionen. Wärme anwenden, Ibuprofen nehmen, sanftes Yoga.',
-    fr: 'Les prostaglandines provoquent des contractions utérines. Appliquez de la chaleur, prenez de l\'ibuprofène.',
+    de: 'Prostaglandine verursachen Gebärmutterkontraktionen. Wärme anwenden, Ibuprofen nehmen.',
+    fr: 'Les prostaglandines provoquent des contractions utérines. Appliquez de la chaleur.',
     es: 'Las prostaglandinas causan contracciones uterinas. Aplica calor, toma ibuprofeno.',
     it: 'Le prostaglandine causano contrazioni uterine. Applica calore, prendi ibuprofene.',
     pt: 'As prostaglandinas causam contrações uterinas. Aplique calor, tome ibuprofeno.',
     zh: '前列腺素引起子宫收缩。热敷，服用布洛芬。',
-    ar: 'تسبب البروستاجلاندين تقلصات الرحم. ضعي كمادات دافئة، تناولي إيبوبروفين.',
+    ar: 'تسبب البروستاجلاندين تقلصات الرحم. ضعي كمادات دافئة.',
   },
   fatigue: {
-    en: 'Hormonal shifts, especially progesterone rise, can cause deep fatigue. Prioritize sleep, reduce commitments, eat protein-rich meals, and supplement B vitamins and iron if needed.',
-    ru: 'Гормональные сдвиги, особенно рост прогестерона, могут вызывать сильную усталость. Уделите приоритет сну, сократите обязательства, ешьте белковую пищу.',
-    uk: 'Гормональні зрушення, особливо зростання прогестерону, можуть викликати сильну втому. Пріоритет — сон, зменшіть зобов\'язання.',
-    de: 'Hormonelle Veränderungen, besonders der Progesteronanstieg, können tiefe Müdigkeit verursachen.',
-    fr: 'Les changements hormonaux, surtout l\'augmentation de la progestérone, peuvent provoquer une fatigue profonde.',
-    es: 'Los cambios hormonales, especialmente el aumento de progesterona, pueden causar fatiga profunda.',
-    it: 'I cambiamenti ormonali, specialmente l\'aumento del progesterone, possono causare stanchezza profonda.',
-    pt: 'As mudanças hormonais, especialmente o aumento da progesterona, podem causar fadiga profunda.',
-    zh: '荷尔蒙变化，尤其是孕酮升高，可能导致深度疲劳。',
-    ar: 'التغيرات الهرمونية، خاصة ارتفاع البروجسترون، يمكن أن تسبب إرهاقًا عميقًا.',
+    en: 'Hormonal shifts, especially progesterone rise, can cause deep fatigue. Prioritize sleep, reduce commitments, eat protein-rich meals.',
+    ru: 'Гормональные сдвиги, рост прогестерона, могут вызывать усталость. Приоритет сну, сократите обязательства, ешьте белковую пищу.',
+    uk: 'Гормональні зрушення, зростання прогестерону, можуть викликати втому. Пріоритет — сон.',
+    de: 'Hormonelle Veränderungen, besonders der Progesteronanstieg, können Müdigkeit verursachen.',
+    fr: 'Les changements hormonaux, surtout l\'augmentation de la progestérone, peuvent provoquer de la fatigue.',
+    es: 'Los cambios hormonales, especialmente el aumento de progesterona, pueden causar fatiga.',
+    it: 'I cambiamenti ormonali, specialmente l\'aumento di progesterone, possono causare stanchezza.',
+    pt: 'Mudanças hormonais, especialmente o aumento de progesterona, podem causar fadiga.',
+    zh: '荷尔蒙变化，尤其是孕酮升高，可能导致疲劳。',
+    ar: 'التغيرات الهرمونية، خاصة ارتفاع البروجسترون، يمكن أن تسبب إرهاقًا.',
   },
   nausea: {
-    en: 'Hormonal fluctuations can affect the digestive system. Eat small, frequent meals, avoid spicy or fatty foods, try ginger tea, and get fresh air.',
-    ru: 'Гормональные колебания влияют на пищеварение. Ешьте маленькими порциями, избегайте острой и жирной пищи, пейте имбирный чай, проветривайте помещение.',
-    uk: 'Гормональні коливання впливають на травлення. Їжте маленькими порціями, уникайте гострої та жирної їжі.',
-    de: 'Hormonschwankungen können das Verdauungssystem beeinflussen. Kleine, häufige Mahlzeiten essen.',
-    fr: 'Les fluctuations hormonales peuvent affecter le système digestif. Mangez de petits repas fréquents.',
-    es: 'Las fluctuaciones hormonales pueden afectar el sistema digestivo. Coma comidas pequeñas y frecuentes.',
-    it: 'Le fluttuazioni ormonali possono influenzare il sistema digestivo. Mangia pasti piccoli e frequenti.',
-    pt: 'As flutuações hormonais podem afetar o sistema digestivo. Faça refeições pequenas e frequentes.',
-    zh: '荷尔蒙波动会影响消化系统。少食多餐。',
-    ar: 'يمكن للتقلبات الهرمونية أن تؤثر على الجهاز الهضمي. تناولي وجبات صغيرة ومتكررة.',
+    en: 'Hormonal fluctuations can affect the digestive system. Eat small, frequent meals, avoid spicy or fatty foods, try ginger tea.',
+    ru: 'Гормональные колебания влияют на пищеварение. Ешьте маленькими порциями, избегайте острой и жирной пищи, пейте имбирный чай.',
+    uk: 'Гормональні коливання впливають на травлення. Їжте маленькими порціями.',
+    de: 'Hormonschwankungen können das Verdauungssystem beeinflussen.',
+    fr: 'Les fluctuations hormonales peuvent affecter le système digestif.',
+    es: 'Las fluctuaciones hormonales pueden afectar el sistema digestivo.',
+    it: 'Le fluttuazioni ormonali possono influenzare il sistema digestivo.',
+    pt: 'As flutuações hormonais podem afetar o sistema digestivo.',
+    zh: '荷尔蒙波动会影响消化系统。',
+    ar: 'يمكن للتقلبات الهرمونية أن تؤثر على الجهاز الهضمي.',
   },
   backpain: {
-    en: 'Lower back pain during your period is caused by uterine contractions radiating to the lower back. Apply heat, try child\'s pose, use a lumbar support pillow, and take warm baths.',
-    ru: 'Боль в пояснице во время месячных вызвана сокращениями матки, отдающими в поясницу. Прикладывайте тепло, поза ребёнка, подушка под поясницу, тёплые ванны.',
-    uk: 'Біль у попереку під час місячних викликаний скороченнями матки. Прикладайте тепло, поза дитини.',
-    de: 'Unterer Rückenschmerz während der Periode wird durch Gebärmutterkontraktionen verursacht.',
-    fr: 'Les douleurs lombaires pendant les règles sont causées par les contractions utérines irradiant vers le bas du dos.',
-    es: 'El dolor lumbar durante el período es causado por las contracciones uterinas que irradian a la zona lumbar.',
-    it: 'Il mal di schiena durante il ciclo è causato dalle contrazioni uterine che si irradiano alla parte bassa della schiena.',
-    pt: 'A dor lombar durante o período é causada por contrações uterinas que irradiam para a região lombar.',
-    zh: '月经期间的下背痛是由子宫收缩辐射到下背部引起的。',
-    ar: 'آلام أسفل الظهر أثناء الدورة الشهرية ناتجة عن تقلصات الرحم التي تمتد إلى أسفل الظهر.',
+    en: 'Lower back pain during your period is caused by uterine contractions radiating to the lower back. Apply heat, try child\'s pose, warm baths.',
+    ru: 'Боль в пояснице во время месячных вызвана сокращениями матки. Прикладывайте тепло, поза ребёнка, тёплые ванны.',
+    uk: 'Біль у попереку під час місячних викликаний скороченнями матки.',
+    de: 'Rückenschmerzen während der Periode werden durch Gebärmutterkontraktionen verursacht.',
+    fr: 'Les douleurs lombaires pendant les règles sont causées par les contractions utérines.',
+    es: 'El dolor lumbar durante el período es causado por contracciones uterinas.',
+    it: 'Il mal di schiena durante il ciclo è causato da contrazioni uterine.',
+    pt: 'A dor lombar durante o período é causada por contrações uterinas.',
+    zh: '月经期间的下背痛是由子宫收缩引起的。',
+    ar: 'آلام أسفل الظهر أثناء الدورة ناتجة عن تقلصات الرحم.',
   },
   breast_tenderness: {
-    en: 'Breast tenderness is caused by progesterone and estrogen fluctuations. Wear a supportive bra, reduce caffeine, try evening primrose oil, and apply cold compresses.',
-    ru: 'Чувствительность груди вызвана колебаниями прогестерона и эстрогена. Носите поддерживающий бюстгальтер, уменьшите кофеин, попробуйте масло примулы вечерней.',
-    uk: 'Чутливість грудей викликана коливаннями прогестерону та естрогену. Носіть підтримуючий бюстгальтер.',
+    en: 'Breast tenderness is caused by progesterone and estrogen fluctuations. Wear a supportive bra, reduce caffeine, try evening primrose oil.',
+    ru: 'Чувствительность груди вызвана колебаниями прогестерона и эстрогена. Носите поддерживающий бюстгальтер, уменьшите кофеин.',
+    uk: 'Чутливість грудей викликана коливаннями прогестерону та естрогену.',
     de: 'Brustspannen wird durch Progesteron- und Östrogenschwankungen verursacht.',
-    fr: 'La sensibilité des seins est causée par les fluctuations de la progestérone et de l\'œstrogène.',
-    es: 'La sensibilidad mamaria es causada por las fluctuaciones de progesterona y estrógeno.',
-    it: 'La sensibilità al seno è causata dalle fluttuazioni di progesterone ed estrogeno.',
-    pt: 'A sensibilidade nos seios é causada por flutuações de progesterona e estrogênio.',
-    zh: '乳房胀痛是由孕酮和雌激素波动引起的。',
-    ar: 'حساسية الثدي ناتجة عن تقلبات البروجسترون والإستروجين.',
+    fr: 'La sensibilité des seins est causée par les fluctuations hormonales.',
+    es: 'La sensibilidad mamaria es causada por fluctuaciones hormonales.',
+    it: 'La sensibilità al seno è causata da fluttuazioni ormonali.',
+    pt: 'A sensibilidade nos seios é causada por flutuações hormonais.',
+    zh: '乳房胀痛是由荷尔蒙波动引起的。',
+    ar: 'حساسية الثدي ناتجة عن التقلبات الهرمونية.',
   },
   cravings: {
-    en: 'Serotonin dips before your period trigger carb and sugar cravings. Eat complex carbs (sweet potatoes, oats), dark chocolate (70%+), and protein-rich snacks to stabilize blood sugar.',
-    ru: 'Падение серотонина перед менструацией вызывает тягу к углеводам и сладкому. Ешьте сложные углеводы (батат, овсянка), тёмный шоколад (70%+), белковые снеки.',
-    uk: 'Падіння серотоніну перед менструацією викликає потяг до вуглеводів і солодкого. Їжте складні вуглеводи.',
-    de: 'Serotoninabfall vor der Periode löst Heißhunger auf Kohlenhydrate und Süßes aus.',
-    fr: 'La baisse de sérotonine avant les règles déclenche des envies de sucres et de glucides.',
-    es: 'La caída de serotonina antes del período desencadena antojos de carbohidratos y azúcar.',
-    it: 'Il calo di serotonina prima del ciclo scatena voglie di carboidrati e zuccheri.',
-    pt: 'A queda de serotonina antes do período desencadeia desejos por carboidratos e açúcar.',
-    zh: '月经前血清素下降会引发对碳水化合物和糖的渴望。',
-    ar: 'انخفاض السيروتونين قبل الدورة الشهرية يحفز الرغبة الشديدة في الكربوهيدرات والسكر.',
+    en: 'Serotonin dips before your period trigger carb and sugar cravings. Eat complex carbs, dark chocolate (70%+), and protein-rich snacks.',
+    ru: 'Падение серотонина перед менструацией вызывает тягу к углеводам и сладкому. Ешьте сложные углеводы, тёмный шоколад (70%+), белковые снеки.',
+    uk: 'Падіння серотоніну перед менструацією викликає потяг до вуглеводів.',
+    de: 'Serotoninabfall vor der Periode löst Heißhunger aus.',
+    fr: 'La baisse de sérotonine avant les règles déclenche des envies alimentaires.',
+    es: 'La caída de serotonina antes del período desencadena antojos.',
+    it: 'Il calo di serotonina prima del ciclo scatena voglie.',
+    pt: 'A queda de serotonina antes do período causa desejos.',
+    zh: '月经前血清素下降会引发对食物的渴望。',
+    ar: 'انخفاض السيروتونين قبل الدورة يحفز الرغبة الشديدة.',
   },
   insomnia: {
-    en: 'Progesterone rise can disrupt sleep patterns. Limit screen time before bed, keep your room cool, try magnesium glycinate, establish a calming bedtime routine.',
-    ru: 'Повышение прогестерона может нарушать сон. Ограничьте экраны перед сном, проветривайте комнату, попробуйте магний глицинат, создайте успокаивающий ритуал.',
-    uk: 'Підвищення прогестерону може порушувати сон. Обмежте екрани перед сном, провітрюйте кімнату.',
-    de: 'Progesteronanstieg kann den Schlaf stören. Reduziere Bildschirmzeit vor dem Schlafengehen.',
-    fr: 'L\'augmentation de la progestérone peut perturber le sommeil. Limitez le temps d\'écran avant le coucher.',
-    es: 'El aumento de progesterona puede alterar el sueño. Limite el tiempo de pantalla antes de acostarse.',
-    it: 'L\'aumento del progesterone può disturbare il sonno. Limita il tempo davanti allo schermo prima di dormire.',
-    pt: 'O aumento da progesterona pode perturbar o sono. Limite o tempo de tela antes de dormir.',
-    zh: '孕酮升高可能会扰乱睡眠。睡前限制屏幕时间。',
-    ar: 'ارتفاع البروجسترون يمكن أن يعطل النوم. قللي وقت الشاشة قبل النوم.',
+    en: 'Progesterone rise can disrupt sleep patterns. Limit screen time before bed, keep your room cool, try magnesium glycinate.',
+    ru: 'Повышение прогестерона может нарушать сон. Ограничьте экраны перед сном, проветривайте комнату, попробуйте магний глицинат.',
+    uk: 'Підвищення прогестерону може порушувати сон. Обмежте екрани перед сном.',
+    de: 'Progesteronanstieg kann den Schlaf stören. Reduziere Bildschirmzeit.',
+    fr: 'L\'augmentation de la progestérone peut perturber le sommeil.',
+    es: 'El aumento de progesterona puede alterar el sueño.',
+    it: 'L\'aumento del progesterone può disturbare il sonno.',
+    pt: 'O aumento da progesterona pode perturbar o sono.',
+    zh: '孕酮升高可能会扰乱睡眠。',
+    ar: 'ارتفاع البروجسترون يمكن أن يعطل النوم.',
   },
   acne: {
-    en: 'Androgen fluctuations increase sebum production before your period. Cleanse gently, use non-comedogenic products, avoid picking. Zinc and spearmint tea may help hormonal acne.',
-    ru: 'Колебания андрогенов усиливают выработку кожного сала перед менструацией. Мягко очищайте кожу, используйте некомедогенные средства, не трогайте прыщи.',
-    uk: 'Коливання андрогенів посилюють вироблення шкірного сала перед менструацією. М\'яко очищайте шкіру.',
-    de: 'Androgen-Schwankungen erhöhen die Talgproduktion vor der Periode. Sanft reinigen.',
-    fr: 'Les fluctuations androgènes augmentent la production de sébum avant les règles. Nettoyez en douceur.',
-    es: 'Las fluctuaciones andrógenas aumentan la producción de sebo antes del período. Limpie suavemente.',
-    it: 'Le fluttuazioni androgeniche aumentano la produzione di sebo prima del ciclo. Pulisci delicatamente.',
-    pt: 'As flutuações androgênicas aumentam a produção de sebo antes do período. Limpe suavemente.',
-    zh: '雄激素波动会在月经前增加皮脂分泌。温和清洁。',
-    ar: 'تقلبات الأندروجين تزيد من إنتاج الزهم قبل الدورة الشهرية. نظفي بلطف.',
+    en: 'Androgen fluctuations increase sebum production before your period. Cleanse gently, use non-comedogenic products. Zinc and spearmint tea may help.',
+    ru: 'Колебания андрогенов усиливают выработку кожного сала перед менструацией. Мягко очищайте кожу, используйте некомедогенные средства.',
+    uk: 'Коливання андрогенів посилюють вироблення шкірного сала.',
+    de: 'Androgen-Schwankungen erhöhen die Talgproduktion.',
+    fr: 'Les fluctuations androgènes augmentent la production de sébum.',
+    es: 'Las fluctuaciones andrógenas aumentan la producción de sebo.',
+    it: 'Le fluttuazioni androgeniche aumentano la produzione di sebo.',
+    pt: 'Flutuações androgênicas aumentam a produção de sebo.',
+    zh: '雄激素波动会增加皮脂分泌。',
+    ar: 'تقلبات الأندروجين تزيد من إنتاج الزهم.',
   },
 };
+
+const pagesNav = [
+  { key: 'dashboard', icon: Home, desc: 'Главная страница с обзором текущей фазы, прогнозом следующей менструации, быстрыми действиями и статистикой.' },
+  { key: 'diary', icon: BookText, desc: 'Дневник симптомов: отмечайте настроение, боль, выделения, симптомы и пишите заметки по дням.' },
+  { key: 'calendar', icon: CalendarDays, desc: 'Календарь цикла с цветовой маркировкой дней менструации и записей в дневнике.' },
+  { key: 'heatmap', icon: ThermometerIcon, desc: 'Тепловая карта вашего цикла — визуализация настроения, боли и симптомов по дням.' },
+  { key: 'timeline', icon: TimelineIcon, desc: 'Хронология всех циклов с детальной разбивкой по фазам и ключевым событиям.' },
+  { key: 'settings', icon: Settings, desc: 'Настройки профиля, темы, языка, параметров цикла, уведомлений и управление данными.' },
+  { key: 'moodboard', icon: Smile, desc: 'Визуальная доска настроения — отслеживайте эмоциональное состояние в течение цикла.' },
+  { key: 'wiki', icon: BookOpen, desc: 'Энциклопедия менструального цикла: статьи о фазах, гормонах, питании и здоровье.' },
+  { key: 'breathe', icon: Wind, desc: 'Дыхательные упражнения с визуальным таймером. Помогает снизить стресс и тревожность.' },
+  { key: 'warmth', icon: Flame, desc: 'Термотерапия: приложение грелки для облегчения менструальных спазмов.' },
+  { key: 'tips', icon: Lightbulb, desc: 'Полезные советы по здоровью, питанию, спорту и психологии для каждой фазы цикла.' },
+];
+
+const faqItems = [
+  { q: 'Как начать отслеживание цикла?', a: 'Перейдите на главную страницу и нажмите «Начать отслеживание». Укажите дату начала последней менструации, и Luna автоматически рассчитает фазы вашего цикла на основе средней длины.' },
+  { q: 'Где хранятся мои данные?', a: 'Все данные хранятся локально в вашем браузере с помощью localStorage. При регистрации аккаунта данные синхронизируются с облаком Supabase. Вы можете экспортировать или удалить данные в настройках.' },
+  { q: 'Как добавить симптомы в дневник?', a: 'Откройте страницу Дневник, выберите дату и нажмите на нужные симптомы. Вы также можете добавить свои симптомы через кнопку «Добавить свой симптом» под списком.' },
+  { q: 'Что такое ПМДР (PMDD)?', a: 'ПМДР (предменструальное дисфорическое расстройство) — это тяжёлая форма ПМС, которая затрагивает 3–8% женщин репродуктивного возраста. Симптомы включают сильную раздражительность, депрессию, тревожность и физический дискомфорт.' },
+  { q: 'Как измерять базальную температуру (БТ)?', a: 'Измеряйте температуру сразу после пробуждения, не вставая с кровати, в одно и то же время. Нормальные значения: 36.1–36.4°C до овуляции, после овуляции 36.5–37.0°C. Используйте цифровой термометр.' },
+  { q: 'Влияют ли лекарства на цикл?', a: 'Да, некоторые лекарства могут влиять на цикл: антидепрессанты, гормональные контрацептивы, антибиотики, препараты для щитовидной железы. Отмечайте приём лекарств в заметках дневника.' },
+  { q: 'Как привычки влияют на цикл?', a: 'Стресс, недосып, резкое изменение веса, интенсивные тренировки и курение могут нарушать цикл. Регулярное отслеживание помогает выявить влияние образа жизни на ваш цикл.' },
+  { q: 'Насколько защищены мои данные?', a: 'Данные хранятся локально на вашем устройстве. При использовании облачной синхронизации данные передаются по зашифрованному соединению. Мы не передаём данные третьим лицам. Соответствует требованиям GDPR.' },
+  { q: 'Как экспортировать данные?', a: 'Перейдите в Настройки → Управление данными → Экспорт данных. Вы получите JSON-файл со всеми циклами, записями дневника и настройками.' },
+  { q: 'Как сменить тему оформления?', a: 'Перейдите в Настройки → Тема оформления. Выберите одну из 17 доступных тем. Тема меняет цвета, акценты и фоновые элементы мгновенно.' },
+  { q: 'Как включить уведомления?', a: 'Перейдите в Настройки → Уведомления. Вы можете настроить напоминания о приближающейся менструации, ежедневные напоминания о записи и оповещение об окне овуляции.' },
+  { q: 'Поддерживается ли синхронизация между устройствами?', a: 'Да, после регистрации аккаунта данные автоматически синхронизируются с облачным сервером Supabase. Вы можете пользоваться Luna на нескольких устройствах.' },
+  { q: 'Как использовать советы по циклу?', a: 'На странице Советы вы найдёте категоризированные статьи по здоровью, питанию, спорту и психологии. Фильтруйте по категориям и фазе цикла.' },
+  { q: 'Что такое термотерапия и как она работает?', a: 'Термотерапия (грелка) использует тепло для расслабления мышц матки и уменьшения спазмов. В приложении есть анимированная грелка с регулировкой температуры и таймером.' },
+  { q: 'Как работают дыхательные упражнения?', a: 'На странице Дыхание выберите один из паттернов дыхания (квадратное, 4-7-8, расслабляющее). Следуйте за визуальным таймером — вдох, задержка, выдох. Помогает снизить тревожность.' },
+  { q: 'В чём разница между ПМС и ПМДР?', a: 'ПМС (предменструальный синдром) испытывают до 75% женщин, симптомы умеренные. ПМДР — более тяжёлая форма, которая серьёзно нарушает качество жизни, требует консультации врача и специфического лечения.' },
+];
+
+const pmddSymptoms = [
+  { key: 'irritability', desc: 'Выраженная раздражительность — малейшие раздражители вызывают гнев. Вы можете чувствовать, что «взрываетесь» без причины.' },
+  { key: 'anxiety', desc: 'Сильная тревожность, чувство внутреннего напряжения. Вы можете испытывать беспричинное беспокойство и панику.' },
+  { key: 'depression', desc: 'Подавленное настроение, чувство пустоты и безнадёжности. Потеря интереса к любимым занятиям.' },
+  { key: 'crying_spells', desc: 'Внезапные приступы плача без видимой причины. Эмоции становятся трудно контролируемыми.' },
+  { key: 'overwhelm', desc: 'Чувство перегрузки и неспособности справляться с повседневными задачами. Всё кажется непосильным.' },
+  { key: 'anger', desc: 'Вспышки гнева и ярости, которые сложно контролировать. Вы можете срываться на близких.' },
+  { key: 'hopelessness', desc: 'Чувство безнадёжности и отчаяния. Кажется, что ничего не имеет значения и не улучшится.' },
+];
+
+const hormones = [
+  { key: 'FSH', name: 'Фолликулостимулирующий гормон (ФСГ)', role: 'Стимулирует рост фолликулов в яичниках. Уровень повышается в начале фолликулярной фазы и стимулирует выработку эстрогена.' },
+  { key: 'LH', name: 'Лютеинизирующий гормон (ЛГ)', role: 'Вызывает овуляцию — выход созревшей яйцеклетки из фолликула. Резкий пик ЛГ за 24–48 часов до овуляции — главный признак фертильного окна.' },
+  { key: 'estrogen', name: 'Эстроген', role: 'Основной женский половой гормон. Растёт в фолликулярной фазе, улучшает настроение, состояние кожи и либидо. Падает перед менструацией.' },
+  { key: 'progesterone', name: 'Прогестерон', role: 'Доминирует в лютеиновой фазе. Подготавливает организм к возможной беременности, повышает температуру тела, может вызывать ПМС-симптомы.' },
+  { key: 'testosterone', name: 'Тестостерон', role: 'Пик приходится на овуляцию. Повышает либидо, энергию, уверенность и мотивацию. Важен для общего гормонального баланса.' },
+];
+
+const nutritionByPhase = [
+  { phase: 'menstrual', foods: 'Красное мясо, печень, шпинат, чечевица, тёмный шоколад, тыквенные семечки, имбирь, куркума.', avoid: 'Кофеин, алкоголь, солёная пища, молочные продукты (могут усиливать спазмы).' },
+  { phase: 'follicular', foods: 'Ферментированные продукты (кефир, квашеная капуста), листовые зелёные овощи, ягоды, орехи, рыба, тофу.', avoid: 'Избыток простых углеводов, консерванты, полуфабрикаты.' },
+  { phase: 'ovulation', foods: 'Брокколи, цветная капуста, авокадо, оливковое масло, киноа, лосось, гранат, зелёный чай.', avoid: 'Сахар, острая пища, красное мясо (может усиливать воспаление).' },
+  { phase: 'luteal', foods: 'Батат, овсянка, тёмный шоколад (70%+), бананы, миндаль, магний, ромашковый чай.', avoid: 'Кофеин, соль, алкоголь, рафинированный сахар, сладкие напитки.' },
+];
+
+const exerciseByPhase = [
+  { phase: 'menstrual', activities: 'Йога, пилатес, растяжка, ходьба, лёгкое плавание, дыхательные практики.' },
+  { phase: 'follicular', activities: 'Бег, силовые тренировки, HIIT, танцы, велосипед, функциональный тренинг.' },
+  { phase: 'ovulation', activities: 'Кардио средней интенсивности, групповые занятия, плавание, теннис, боевые искусства.' },
+  { phase: 'luteal', activities: 'Умеренные тренировки, пилатес, прогулки, стретчинг, йога, медитация.' },
+];
 
 export default function HelpPage() {
   const t = useT() as unknown as {
     help: Record<string, string> & { faq?: { q: string; a: string }[] };
     common: Record<string, string>;
     dashboard: Record<string, string>;
-    diary: { symptoms_list: Record<string, string> };
+    diary: { symptoms_list: Record<string, string>; pmdd_list: Record<string, string> };
+    nav: Record<string, string>;
+    settings: Record<string, string>;
   };
   const lang = useSettingsStore((s) => s.lang);
   const isRtl = lang === 'ar';
   const help = t.help || {};
-  const avgLength = useSettingsStore((s) => s.averageCycleLength);
-  const avgPeriod = useSettingsStore((s) => s.averagePeriodLength);
-  const getPhaseForDate = useCycleStore((s) => s.getPhaseForDate);
-  const currentPhase = getPhaseForDate(new Date(), avgLength, avgPeriod);
+  const nav = t.nav || {};
 
   const gt = (rec: Record<string, string | undefined>) => rec[lang] || rec.en || '';
-
-  const faqItems = help.faq?.length ? help.faq : [
-    { q: 'How do I start tracking?', a: 'Go to Dashboard and click "Start Tracking". Enter the date your last period began, and Luna will calculate your cycle phases automatically.' },
-    { q: 'Where is my data stored?', a: 'All data is stored locally in your browser using localStorage. Nothing is sent to any server. You can export your data from Settings.' },
-    { q: 'How do I add symptoms?', a: 'Open the Diary page, select a date, and tap any symptom to log it. You can also add custom symptoms using the "Add custom symptom" button.' },
-    { q: 'What do the calendar colors mean?', a: 'Red dots indicate period days, blue dots indicate days with diary entries, and the highlighted border marks today.' },
-    { q: 'How accurate are phase predictions?', a: 'Predictions are based on your logged cycles. The more cycles you track, the more accurate predictions become.' },
-    { q: 'Can I export my data?', a: "Yes! Go to Settings → Data Management → Export Data. You'll get a JSON file with all your cycles and diary entries." },
-    { q: 'What is the Streak Garden?', a: 'Each flower represents one of the last 9 days. Log a diary entry to make it grow. Skip a day and it wilts. Keep a full streak for rare flowers!' },
-    { q: 'How do I change the theme?', a: 'Go to Settings → Theme. Choose from 17 unique themes. The theme applies instantly, changing colors, fonts, and the animated background.' },
-  ];
 
   return (
     <div className="relative min-h-[calc(100vh-6rem)]" dir={isRtl ? 'rtl' : 'ltr'}>
@@ -260,29 +317,51 @@ export default function HelpPage() {
           className="mb-8"
         >
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-theme-lg bg-gradient-accent">
-              <HelpCircle className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-theme-primary tracking-tight">{help.title || 'Help & Guide'}</h1>
-              <p className="text-sm text-theme-muted mt-0.5">{help.subtitle || 'Everything you need to know about Luna'}</p>
-            </div>
+          <div className="p-3 rounded-theme-lg bg-gradient-accent">
+            <HelpCircle className="w-6 h-6 text-white" />
           </div>
-        </motion.div>
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-theme-primary tracking-tight">{help.title || 'Помощь и руководство'}</h1>
+            <p className="text-sm text-theme-muted mt-0.5">{help.subtitle || 'Всё, что нужно знать о Luna'}</p>
+          </div>
+        </div>
+      </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="space-y-6"
-        >
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+
+          {/* Quick Start / Navigation */}
+          <motion.div variants={itemVariants}>
+            <Card variant="glass">
+              <div className="flex items-center gap-2 mb-5">
+                <Home className="w-5 h-5 text-accent" />
+                <h2 className="text-lg font-semibold text-theme-primary">Навигация по страницам</h2>
+              </div>
+              <p className="text-xs text-theme-muted mb-5">Краткое описание всех страниц приложения и когда их использовать</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {pagesNav.map((p) => {
+                  const Icon = p.icon;
+                  return (
+                    <div key={p.key} className="flex gap-3 p-3 rounded-theme-md border border-theme bg-theme-card/40">
+                      <div className="p-2 rounded-theme-sm bg-gradient-accent shrink-0 self-start">
+                        <Icon className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-theme-primary">{nav[p.key] || p.key}</p>
+                        <p className="text-xs text-theme-secondary mt-0.5">{p.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          </motion.div>
 
           {/* Cycle Phases */}
           <motion.div variants={itemVariants}>
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-5">
                 <Moon className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.phasesTitle || 'Cycle Phases'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.phasesTitle || 'Фазы цикла'}</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {phases.map((p) => {
@@ -313,45 +392,43 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-5">
                 <Activity className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.phaseHubTitle || 'Phase Hub'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.phaseHubTitle || 'Гид по фазам'}</h2>
               </div>
-              <p className="text-xs text-theme-muted mb-5">{help.phaseHubDesc || 'Your personal cycle phase guide'}</p>
+              <p className="text-xs text-theme-muted mb-5">{help.phaseHubDesc || 'Персональный гид по фазам цикла — что происходит в вашем теле прямо сейчас'}</p>
 
-              {/* Current phase highlighted */}
               <div className="mb-5 p-4 rounded-theme-lg border-2 relative overflow-hidden"
                 style={{
-                  borderColor: `var(--phase-${currentPhase})`,
-                  background: `linear-gradient(135deg, var(--phase-${currentPhase})15, transparent)`,
+                  borderColor: `var(--phase-${'menstrual'})`,
+                  background: `linear-gradient(135deg, var(--phase-${'menstrual'})15, transparent)`,
                 }}
               >
                 <div className="absolute top-2 right-2">
                   <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-full"
-                    style={{ background: `var(--phase-${currentPhase})`, color: '#fff' }}
+                    style={{ background: `var(--phase-${'menstrual'})`, color: '#fff' }}
                   >
-                    {t.common[`phase${currentPhase.charAt(0).toUpperCase() + currentPhase.slice(1)}`] || currentPhase}
+                    {t.common.phaseMenstrual || 'Менструация'}
                   </span>
                 </div>
-                <span className="text-[10px] uppercase tracking-wider text-theme-muted font-medium">{t.common.current || 'Current Phase'}</span>
+                <span className="text-[10px] uppercase tracking-wider text-theme-muted font-medium">{t.common.current || 'Текущая фаза'}</span>
                 <div className="mt-2 space-y-2">
-                  <p className="text-sm text-theme-secondary leading-relaxed">{gt(phaseDetails[currentPhase]?.body || {})}</p>
+                  <p className="text-sm text-theme-secondary leading-relaxed">{gt(phaseDetails.menstrual?.body || {})}</p>
                   <div className="flex items-start gap-2 text-xs text-theme-primary">
                     <Heart className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5" />
-                    <span>{gt(phaseDetails[currentPhase]?.selfCare || {})}</span>
+                    <span>{gt(phaseDetails.menstrual?.selfCare || {})}</span>
                   </div>
                   <div className="flex items-start gap-2 text-xs text-theme-muted italic">
                     <span className="text-accent shrink-0">💡</span>
-                    <span>{gt(phaseDetails[currentPhase]?.tip || {})}</span>
+                    <span>{gt(phaseDetails.menstrual?.tip || {})}</span>
                   </div>
                 </div>
               </div>
 
-              {/* All phases details */}
               <div className="space-y-3">
                 {phases.map((p) => {
                   const Icon = p.icon;
                   const phaseKey = p.key as 'menstrual' | 'follicular' | 'ovulation' | 'luteal';
                   const label = t.common[`phase${phaseKey.charAt(0).toUpperCase() + phaseKey.slice(1)}`] || p.key;
-                  const isCurrent = currentPhase === phaseKey;
+                  const isCurrent = false;
                   return (
                     <details key={p.key} className={`group rounded-theme-md border overflow-hidden ${isCurrent ? 'border-accent/50' : 'border-theme'}`}>
                       <summary className="flex items-center gap-3 px-4 py-3 cursor-pointer text-sm font-medium text-theme-primary hover:bg-theme-card-hover/30 transition-colors">
@@ -361,11 +438,11 @@ export default function HelpPage() {
                         <ChevronDown className="w-3.5 h-3.5 text-theme-muted transition-transform group-open:rotate-180" />
                       </summary>
                       <div className="px-4 pb-4 space-y-2 text-xs text-theme-secondary leading-relaxed">
-                        <p className="text-theme-primary font-medium">{t.common.whatHappens || 'What happens:'}</p>
+                        <p className="text-theme-primary font-medium">{t.common.whatHappens || 'Что происходит:'}</p>
                         <p>{gt(phaseDetails[phaseKey]?.body || {})}</p>
-                        <p className="text-theme-primary font-medium mt-2">{t.common.selfCare || 'Self-care:'}</p>
+                        <p className="text-theme-primary font-medium mt-2">{t.common.selfCare || 'Забота о себе:'}</p>
                         <p>{gt(phaseDetails[phaseKey]?.selfCare || {})}</p>
-                        <p className="text-theme-primary font-medium mt-2">{t.common.tip || 'Tip:'}</p>
+                        <p className="text-theme-primary font-medium mt-2">{t.common.tip || 'Совет:'}</p>
                         <p className="italic">{gt(phaseDetails[phaseKey]?.tip || {})}</p>
                       </div>
                     </details>
@@ -380,7 +457,7 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-4">
                 <Heart className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.moodTitle || 'Mood Scale'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.moodTitle || 'Шкала настроения'}</h2>
               </div>
               <div className="flex flex-wrap gap-3">
                 {moodLevels.map((m) => (
@@ -401,7 +478,7 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-4">
                 <Thermometer className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.painTitle || 'Pain Scale'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.painTitle || 'Шкала боли'}</h2>
               </div>
               <div className="flex flex-wrap gap-2">
                 {[1, 2, 3, 4, 5].map((v) => (
@@ -421,7 +498,7 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-4">
                 <Droplets className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.flowTitle || 'Flow Levels'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.flowTitle || 'Уровень выделений'}</h2>
               </div>
               <div className="flex flex-wrap gap-3">
                 {flowLevels.map((f) => (
@@ -439,12 +516,12 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-4">
                 <Brain className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.symptomsTitle || 'Symptoms'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.symptomsTitle || 'Симптомы'}</h2>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {symptomsList.map((s) => (
                   <div key={s.key} className="flex items-center gap-2 px-3 py-2 rounded-theme-md border border-theme bg-theme-card/50">
-                    <span className="text-base">{s.icon}</span>
+                  <span className="text-base">{s.icon}</span>
                     <span className="text-xs text-theme-primary">{(t.diary.symptoms_list)[s.key] || s.key}</span>
                   </div>
                 ))}
@@ -457,9 +534,9 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-5">
                 <Info className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.symptomGuideTitle || 'Symptom Guide'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.symptomGuideTitle || 'Гид по симптомам'}</h2>
               </div>
-              <p className="text-xs text-theme-muted mb-5">{help.symptomGuideDesc || 'Detailed information about each tracked symptom'}</p>
+              <p className="text-xs text-theme-muted mb-5">{help.symptomGuideDesc || 'Подробная информация о каждом отслеживаемом симптоме'}</p>
               <div className="space-y-2">
                 {symptomsList.map((s) => {
                   const label = (t.diary.symptoms_list)[s.key] || s.key;
@@ -472,12 +549,186 @@ export default function HelpPage() {
                         <span className="flex-1">{label}</span>
                         <ChevronDown className="w-3.5 h-3.5 text-theme-muted transition-transform group-open:rotate-180" />
                       </summary>
-                      <div className="px-4 pb-3 text-xs text-theme-secondary leading-relaxed">
-                        {gt(detail)}
-                      </div>
+                      <div className="px-4 pb-3 text-xs text-theme-secondary leading-relaxed">{gt(detail)}</div>
                     </details>
                   );
                 })}
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* PMDD */}
+          <motion.div variants={itemVariants}>
+            <Card variant="glass">
+              <div className="flex items-center gap-2 mb-4">
+                <Stethoscope className="w-5 h-5 text-accent" />
+                <h2 className="text-lg font-semibold text-theme-primary">ПМДР (PMDD)</h2>
+              </div>
+              <div className="space-y-4">
+                <div className="p-4 rounded-theme-md border border-red-200/30 bg-red-50/10">
+                  <p className="text-sm text-theme-secondary leading-relaxed">
+                    ПМДР (предменструальное дисфорическое расстройство) — это тяжёлая форма ПМС, затрагивающая 3–8% женщин. 
+                    Симптомы появляются в лютеиновой фазе и значительно ухудшают качество жизни. В отличие от ПМС, ПМДР 
+                    характеризуется выраженными эмоциональными симптомами: сильная раздражительность, депрессия, тревожность, 
+                    гнев и чувство безнадёжности. Симптомы исчезают с началом менструации.
+                  </p>
+                </div>
+
+                <div className="text-xs text-theme-muted mb-2">7 основных симптомов ПМДР:</div>
+                <div className="space-y-2">
+                  {pmddSymptoms.map((s) => {
+                    const label = (t.diary.pmdd_list)?.[s.key] || s.key;
+                    return (
+                      <details key={s.key} className="group rounded-theme-md border border-theme bg-theme-card/30 overflow-hidden">
+                        <summary className="flex items-center gap-3 px-4 py-3 cursor-pointer text-sm font-medium text-theme-primary hover:bg-theme-card-hover/30 transition-colors">
+                          <span className="text-base shrink-0">🔴</span>
+                          <span className="flex-1">{label}</span>
+                          <ChevronDown className="w-3.5 h-3.5 text-theme-muted transition-transform group-open:rotate-180" />
+                        </summary>
+                        <div className="px-4 pb-3 text-xs text-theme-secondary leading-relaxed">{s.desc}</div>
+                      </details>
+                    );
+                  })}
+                </div>
+
+                <div className="p-4 rounded-theme-md bg-amber-50/10 border border-amber-200/30 mt-4">
+                  <p className="text-sm font-medium text-theme-primary mb-1">Когда обратиться к врачу</p>
+                  <p className="text-xs text-theme-secondary leading-relaxed">
+                    Если симптомы серьёзно нарушают вашу повседневную жизнь — работу, отношения, сон — обратитесь к гинекологу 
+                    или психиатру. ПМДР поддаётся лечению: КПТ, антидепрессанты (СИОЗС), гормональная терапия, изменения образа жизни.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-3 rounded-theme-md border border-rose-200/30 bg-rose-50/10">
+                  <p className="text-xs font-medium text-theme-primary mb-1">ПМС (PMS)</p>
+                  <ul className="text-[11px] text-theme-secondary space-y-1">
+                    <li>• До 75% женщин репродуктивного возраста</li>
+                    <li>• Умеренные физические и эмоциональные симптомы</li>
+                    <li>• Симптомы доставляют дискомфорт, но не нарушают жизнь</li>
+                    </ul>
+                  </div>
+                <div className="p-3 rounded-theme-md border border-red-200/30 bg-red-50/10">
+                  <p className="text-xs font-medium text-theme-primary mb-1">ПМДР (PMDD)</p>
+                  <ul className="text-[11px] text-theme-secondary space-y-1">
+                    <li>• 3–8% женщин репродуктивного возраста</li>
+                    <li>• Тяжёлые эмоциональные симптомы</li>
+                    <li>• Серьёзно нарушает качество жизни</li>
+                    <li>• Требует профессиональной помощи</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Hormones */}
+          <motion.div variants={itemVariants}>
+            <Card variant="glass">
+              <div className="flex items-center gap-2 mb-4">
+                <Scale className="w-5 h-5 text-accent" />
+                <h2 className="text-lg font-semibold text-theme-primary">Гормональный фон</h2>
+              </div>
+              <p className="text-xs text-theme-muted mb-4">Как ключевые гормоны влияют на ваш цикл и самочувствие</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {hormones.map((h) => (
+                  <div key={h.key} className="p-3 rounded-theme-md border border-theme bg-theme-card/40">
+                    <p className="text-sm font-medium text-theme-primary">{h.name}</p>
+                    <p className="text-xs text-theme-secondary mt-1 leading-relaxed">{h.role}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Nutrition by Phase */}
+          <motion.div variants={itemVariants}>
+            <Card variant="glass">
+              <div className="flex items-center gap-2 mb-4">
+                <Pill className="w-5 h-5 text-accent" />
+                <h2 className="text-lg font-semibold text-theme-primary">Питание по фазам</h2>
+              </div>
+              <p className="text-xs text-theme-muted mb-4">Что есть и чего избегать в каждой фазе цикла</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {nutritionByPhase.map((n) => {
+                  const phaseLabel = t.common[`phase${n.phase.charAt(0).toUpperCase() + n.phase.slice(1)}`] || n.phase;
+                  const pColor = phases.find((p) => p.key === n.phase)?.color || 'var(--accent)';
+                  return (
+                    <div key={n.phase} className="p-3 rounded-theme-md border" style={{ borderColor: `${pColor}40`, background: `linear-gradient(135deg, ${pColor}08, transparent)` }}>
+                      <p className="text-sm font-medium text-theme-primary mb-1" style={{ color: pColor }}>{phaseLabel}</p>
+                      <div className="space-y-1 text-xs">
+                        <p><span className="font-medium text-green-600">Рекомендуется:</span> {n.foods}</p>
+                        <p><span className="font-medium text-red-500">Избегать:</span> {n.avoid}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Exercise & Activity */}
+          <motion.div variants={itemVariants}>
+            <Card variant="glass">
+              <div className="flex items-center gap-2 mb-4">
+                <Dumbbell className="w-5 h-5 text-accent" />
+                <h2 className="text-lg font-semibold text-theme-primary">Упражнения и активность</h2>
+              </div>
+              <p className="text-xs text-theme-muted mb-4">Рекомендованные виды физической активности для каждой фазы</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {exerciseByPhase.map((e) => {
+                  const phaseKey = e.phase as 'menstrual' | 'follicular' | 'ovulation' | 'luteal';
+                  const label = t.common[`phase${phaseKey.charAt(0).toUpperCase() + phaseKey.slice(1)}`] || e.phase;
+                  const pColor = phases.find((p) => p.key === e.phase)?.color || 'var(--accent)';
+                  return (
+                    <div key={e.phase} className="p-3 rounded-theme-md border" style={{ borderColor: `${pColor}40`, background: `linear-gradient(135deg, ${pColor}08, transparent)` }}>
+                      <p className="text-sm font-medium text-theme-primary mb-1" style={{ color: pColor }}>{label}</p>
+                      <p className="text-xs text-theme-secondary leading-relaxed">{e.activities}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Sleep, Water, BBT */}
+          <motion.div variants={itemVariants}>
+            <Card variant="glass">
+              <div className="flex items-center gap-2 mb-4">
+                <MoonIcon className="w-5 h-5 text-accent" />
+                <h2 className="text-lg font-semibold text-theme-primary">Сон, вода и базальная температура</h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-3 rounded-theme-md border border-theme bg-theme-card/40">
+                  <div className="flex items-center gap-2 mb-2">
+                    <MoonIcon className="w-4 h-4 text-indigo-400" />
+                    <span className="text-sm font-medium text-theme-primary">Сон</span>
+                  </div>
+                  <p className="text-xs text-theme-secondary leading-relaxed">
+                    Недостаток сна повышает кортизол, что может нарушать овуляцию и усиливать ПМС. 
+                    Рекомендуется 7–9 часов сна. В лютеиновой фазе качество сна может ухудшаться из-за повышения прогестерона.
+                  </p>
+                </div>
+                <div className="p-3 rounded-theme-md border border-theme bg-theme-card/40">
+                  <div className="flex items-center gap-2 mb-2">
+                    <DropletIcon className="w-4 h-4 text-sky-400" />
+                    <span className="text-sm font-medium text-theme-primary">Вода</span>
+                  </div>
+                  <p className="text-xs text-theme-secondary leading-relaxed">
+                    Рекомендуется 1.5–2 литра воды в день. Во время менструации увеличивайте потребление воды 
+                    для компенсации потери жидкости. Хорошая гидратация уменьшает вздутие и усталость.
+                  </p>
+                </div>
+                <div className="p-3 rounded-theme-md border border-theme bg-theme-card/40">
+                  <div className="flex items-center gap-2 mb-2">
+                    <ThermometerIcon className="w-4 h-4 text-rose-400" />
+                    <span className="text-sm font-medium text-theme-primary">БТ (базальная температура)</span>
+                  </div>
+                  <p className="text-xs text-theme-secondary leading-relaxed">
+                    Норма: 36.0–36.5°C (до овуляции), 36.5–37.0°C (после овуляции). 
+                    Измеряйте сразу после пробуждения, не вставая с кровати. Повышение БТ подтверждает овуляцию.
+                  </p>
+                </div>
               </div>
             </Card>
           </motion.div>
@@ -487,22 +738,16 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-4">
                 <CalendarDays className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.calendarTitle || 'Calendar Legend'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.calendarTitle || 'Легенда календаря'}</h2>
               </div>
               <div className="flex flex-wrap gap-4">
                 {[
-                  { color: '#fca5a5', label: 'Period day' },
-                  { color: 'var(--accent)', label: 'Has diary entry' },
-                  { color: 'transparent', label: 'Today', border: 'var(--accent)' },
+                  { color: '#fca5a5', label: 'День менструации' },
+                  { color: 'var(--accent)', label: 'Есть запись в дневнике' },
+                  { color: 'transparent', label: 'Сегодня', border: 'var(--accent)' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-2">
-                    <div
-                      className="w-4 h-4 rounded-sm border"
-                      style={{
-                        background: item.color,
-                        borderColor: item.border || item.color,
-                      }}
-                    />
+                    <div className="w-4 h-4 rounded-sm border" style={{ background: item.color, borderColor: item.border || item.color }} />
                     <span className="text-xs text-theme-secondary">{item.label}</span>
                   </div>
                 ))}
@@ -515,7 +760,7 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-4">
                 <Palette className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.themesTitle || 'Themes'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.themesTitle || 'Темы оформления'}</h2>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                 {themes.map((th) => (
@@ -525,7 +770,7 @@ export default function HelpPage() {
                         <div key={i} className="flex-1 h-8 rounded-theme-sm" style={{ background: c }} />
                       ))}
                     </div>
-                    <p className="text-xs font-medium text-theme-primary capitalize">{th.key}</p>
+                    <p className="text-xs font-medium text-theme-primary capitalize">{t.settings[th.key] || th.key}</p>
                   </div>
                 ))}
               </div>
@@ -537,7 +782,7 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-4">
                 <Info className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.faqTitle || 'FAQ'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.faqTitle || 'Часто задаваемые вопросы'}</h2>
               </div>
               <div className="space-y-2">
                 {faqItems.map((faq, i) => (
@@ -546,11 +791,41 @@ export default function HelpPage() {
                       {faq.q}
                       <ChevronDown className="w-4 h-4 text-theme-muted transition-transform group-open:rotate-180" />
                     </summary>
-                    <div className="px-4 pb-3 text-xs text-theme-secondary leading-relaxed">
-                      {faq.a}
-                    </div>
+                    <div className="px-4 pb-3 text-xs text-theme-secondary leading-relaxed">{faq.a}</div>
                   </details>
                 ))}
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Data & Privacy */}
+          <motion.div variants={itemVariants}>
+            <Card variant="glass">
+              <div className="flex items-center gap-2 mb-4">
+                <Shield className="w-5 h-5 text-accent" />
+                <h2 className="text-lg font-semibold text-theme-primary">Данные и конфиденциальность</h2>
+              </div>
+              <div className="space-y-3 text-xs text-theme-secondary leading-relaxed">
+                <div className="p-3 rounded-theme-md bg-green-50/10 border border-green-200/30">
+                  <p className="text-sm font-medium text-theme-primary mb-1">Локальное хранение</p>
+                  <p>Все основные данные хранятся в localStorage вашего браузера. Данные не покидают ваше устройство, 
+                  если вы не включите облачную синхронизацию.</p>
+                </div>
+                <div className="p-3 rounded-theme-md bg-blue-50/10 border border-blue-200/30">
+                  <p className="text-sm font-medium text-theme-primary mb-1">Облачная синхронизация (Supabase)</p>
+                  <p>При регистрации аккаунта данные синхронизируются с Supabase — безопасной базой данных с 
+                  шифрованием при передаче (TLS) и хранении. Вы можете отключить синхронизацию в любой момент.</p>
+                </div>
+                <div className="p-3 rounded-theme-md bg-purple-50/10 border border-purple-200/30">
+                  <p className="text-sm font-medium text-theme-primary mb-1">GDPR</p>
+                  <p>Luna соблюдает требования GDPR. Вы имеете право: получить копию своих данных, удалить свои данные, 
+                  отозвать согласие на обработку. Для запроса напишите на почту поддержки.</p>
+                </div>
+                <div className="p-3 rounded-theme-md bg-amber-50/10 border border-amber-200/30">
+                  <p className="text-sm font-medium text-theme-primary mb-1">Безопасность</p>
+                  <p>Мы не собираем аналитику, не передаём данные третьим лицам, не используем рекламные трекеры. 
+                  Все данные принадлежат только вам.</p>
+                </div>
               </div>
             </Card>
           </motion.div>
@@ -560,14 +835,14 @@ export default function HelpPage() {
             <Card variant="glass">
               <div className="flex items-center gap-2 mb-3">
                 <Info className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-semibold text-theme-primary">{help.aboutTitle || 'About'}</h2>
+                <h2 className="text-lg font-semibold text-theme-primary">{help.aboutTitle || 'О приложении'}</h2>
               </div>
               <div className="space-y-1 text-sm text-theme-secondary">
-                <p><span className="font-medium text-theme-primary">Luna</span> — {help.aboutDesc || 'Beautiful menstrual cycle tracking app'}</p>
-                <p>{help.version || 'Version'}: 2.0</p>
-                <p>{help.tech || 'Built with'}: Next.js 16, React 19, Zustand, Framer Motion, Tailwind CSS v4, Recharts, date-fns</p>
-                <p>{help.dataStorage || 'Data storage'}: {help.localStorage || 'localStorage (your data stays on your device)'}</p>
-                <p>{help.languages || 'Languages'}: 10 {help.languagesSupported || 'supported languages'}</p>
+                <p><span className="font-medium text-theme-primary">Luna</span> — {help.aboutDesc || 'Красивое приложение для отслеживания менструального цикла'}</p>
+                <p>{help.version || 'Версия'}: 2.0</p>
+                <p>{help.tech || 'Стек технологий'}: Next.js 16, React 19, Zustand, Framer Motion, Tailwind CSS v4, Recharts, date-fns</p>
+                <p>{help.dataStorage || 'Хранение данных'}: {help.localStorage || 'localStorage + Supabase Cloud'}</p>
+                <p>{help.languages || 'Языки'}: 10 {help.languagesSupported || 'поддерживаемых языков'}</p>
               </div>
             </Card>
           </motion.div>

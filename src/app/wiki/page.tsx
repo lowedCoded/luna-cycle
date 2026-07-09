@@ -1,10 +1,9 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ChevronDown, ChevronUp, BookOpen, FileSearch } from 'lucide-react';
 import { wikiArticles } from '@/data/wiki';
-
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -15,6 +14,8 @@ const cardVariants = {
   hidden: { opacity: 0, y: 16, scale: 0.97 },
   visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring' as const, damping: 22, stiffness: 200 } },
 };
+
+const CATEGORY_ORDER = ['Basics', 'Science', 'Health', 'Nutrition', 'Fitness', 'Tracking', 'Psychology', 'Troubleshooting'];
 
 export default function WikiPage() {
   const [search, setSearch] = useState('');
@@ -27,13 +28,14 @@ export default function WikiPage() {
         a.title.toLowerCase().includes(q) ||
         a.titleRu.toLowerCase().includes(q) ||
         a.category.toLowerCase().includes(q) ||
-        a.categoryRu.toLowerCase().includes(q)
+        a.categoryRu.toLowerCase().includes(q) ||
+        (a.tags?.some?.((t) => t.toLowerCase().includes(q)) ?? false)
     );
   }, [search]);
 
   const categories = useMemo(() => {
     const cats = new Set(filtered.map((a) => a.category));
-    return Array.from(cats);
+    return CATEGORY_ORDER.filter((c) => cats.has(c));
   }, [filtered]);
 
   return (
