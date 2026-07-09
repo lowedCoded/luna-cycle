@@ -13,19 +13,29 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError(error.message === 'Invalid login credentials' ? 'Неверный email или пароль' : error.message);
-    } else {
-      router.push('/');
-      router.refresh();
+    try {
+      const supabase = createClient();
+      if (!supabase) {
+        setError('Supabase не настроен');
+        setLoading(false);
+        return;
+      }
+
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+      if (authError) {
+        setError(authError.message === 'Invalid login credentials' ? 'Неверный email или пароль' : authError.message);
+      } else {
+        router.push('/');
+        router.refresh();
+      }
+    } catch {
+      setError('Ошибка подключения');
     }
     setLoading(false);
   };

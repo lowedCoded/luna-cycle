@@ -9,6 +9,7 @@ const sb = () => createClient() as any;
 
 export async function syncToServer(type: SyncType, data: unknown) {
   const supabase = createClient();
+  if (!supabase) return;
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return;
 
@@ -21,6 +22,7 @@ export async function syncToServer(type: SyncType, data: unknown) {
 
 export async function syncFromServer(type: SyncType | 'all'): Promise<Record<string, unknown> | null> {
   const supabase = createClient();
+  if (!supabase) return null;
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return null;
 
@@ -42,6 +44,7 @@ export async function syncFromServer(type: SyncType | 'all'): Promise<Record<str
 
 export async function isAuthenticated(): Promise<boolean> {
   const supabase = createClient();
+  if (!supabase) return false;
   const { data: { session } } = await supabase.auth.getSession();
   return !!session;
 }
